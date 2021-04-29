@@ -1,0 +1,12 @@
+.navigation {
+    display: none;
+    font-size:1rem;
+    font-weight: 600;
+    margin-top:1.4rem
+}
+
+@media only screen and (min-width: 992px) {
+   .navigation {
+       display: flex;
+   }
+}

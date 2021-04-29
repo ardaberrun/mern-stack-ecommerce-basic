@@ -1,0 +1,38 @@
+.icon {
+    margin-top: 0.5rem;
+    margin-right: 1rem;
+}
+
+.res {
+    justify-content: flex-start;
+}
+
+.nav-icon {
+    display: flex;
+    font-size: 2rem;
+    justify-content: flex-end;
+  
+}
+.nav-icon a {
+    color:black
+}
+
+.nav-text {
+    display: none;
+}
+@media only screen and (min-width: 992px) {
+    .icon {
+        display: none;
+    }
+
+    .res {
+        justify-content: flex-end;
+    }
+    .nav-icon{
+        display: none;
+    }
+    .nav-text {
+        display: flex;
+        justify-content: flex-start;
+    }
+}
