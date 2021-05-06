@@ -1,16 +1,17 @@
 import React from "react";
-import {  useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Result, Button } from "antd";
 import { useHistory } from "react-router-dom";
-import { Row, Col, Typography, InputNumber,Card } from "antd";
+import { Row, Col, Typography, InputNumber, Card } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import {increaseItem} from '../redux/actions/cartAction'
+import { changeQuantity, removeItem } from "../redux/actions/cartAction";
 
 function Basket() {
   const { user, cart } = useSelector((state) => state);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const history = useHistory();
 
+  const totalPrice = (cartItems) => cartItems.reduce((acc,curr) => acc+(curr.product.price * curr.quantity),0)
 
   return !user.user ? (
     <Result
@@ -36,25 +37,25 @@ function Basket() {
     />
   ) : (
     <>
-      <Row style={{ marginTop: "2rem" }} align="middle" >
+      <Row style={{ marginTop: "2rem" }} align="middle">
         <Col xs={24}>
           <Typography.Text strong>
             Toplam {cart.cartItems.length} sonuç gösteriliyor
           </Typography.Text>
         </Col>
       </Row>
-      <Row align="top" style={{ marginTop: "2rem" }}  gutter={[16, 8]}>
-        {cart.cartItems.map((cartItem) => (
-          <Col
-            xs={24}
-            lg={16}
-            key={cartItem.product._id}
-            style={{ border: "1px solid #f3f3f3" }}
-          >
+      <Row align="top" style={{ marginTop: "2rem" }} gutter={[16, 8]}>
+        <Col xs={24} lg={16}>
+          {cart.cartItems.map((cartItem) => (
             <Row
               justify="space-between"
               align="middle"
-              style={{ padding: "1rem" }}
+              key={cartItem.product._id}
+              style={{
+                padding: "1rem",
+                border: "1px solid #f3f3f3",
+                marginBottom: "0.3rem",
+              }}
             >
               <Col
                 xs={{ span: 20, order: 1 }}
@@ -75,18 +76,22 @@ function Basket() {
                 </div>
               </Col>
               <Col xs={{ span: 12, order: 3 }} md={{ span: 8, order: 2 }}>
-                <InputNumber onStep={((value,info) => {
-                if(info.type === 'up') dispatch(increaseItem(cartItem.product._id))
-                // else dispatch(decreaseItem(cartItem._id))           
-              })}
-               defaultValue={cartItem.quantity} />
+                <InputNumber
+                  min={1}
+                  onStep={(value, info) => {
+                    dispatch(changeQuantity(cartItem.product._id, value));
+                  }}
+                  defaultValue={cartItem.quantity}
+                />
               </Col>
               <Col
                 xs={{ span: 4, order: 2 }}
                 md={{ span: 2, order: 3 }}
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
-                <Typography.Title level={5}>300TL</Typography.Title>
+                <Typography.Title level={5}>
+                  {cartItem.product.price * cartItem.quantity}TL
+                </Typography.Title>
               </Col>
               <Col
                 xs={{ span: 12, order: 4 }}
@@ -96,23 +101,39 @@ function Basket() {
               >
                 <DeleteOutlined
                   style={{ fontSize: "20px", marginBottom: "8px" }}
+                  onClick={() => dispatch(removeItem(cartItem.product._id))}
                 />
               </Col>
             </Row>
-          </Col>
-        ))}
-        <Col xs={24} lg={8} >
+          ))}
+        </Col>
+
+        <Col xs={24} lg={8}>
           <Card title="Sipariş Özeti">
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <Typography.Text strong>Fiyat</Typography.Text>
-            <Typography.Text strong>300TL</Typography.Text>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography.Text strong>Fiyat</Typography.Text>
+              <Typography.Text strong>{totalPrice(cart.cartItems)}TL</Typography.Text>
             </div>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <Typography.Text strong>Kargo Toplamı</Typography.Text>
-            <Typography.Text strong>9.99TL</Typography.Text>
-            </div>      
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography.Text strong>Kargo Toplamı</Typography.Text>
+              <Typography.Text strong>0TL</Typography.Text>
+            </div>
           </Card>
-          <Button type="primary" style={{width:"100%",marginTop:"0.5rem"}}>Siparişi Tamamla</Button>
+          <Button type="primary" style={{ width: "100%", marginTop: "0.5rem" }}>
+            Siparişi Tamamla
+          </Button>
         </Col>
       </Row>
     </>

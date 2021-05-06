@@ -3,10 +3,9 @@ import {
   CART_GET_ITEM_FAIL,
   CART_ADD_ITEM,
   CART_REMOVE_ITEM,
-  CART_INCREASE_ITEM,
-  CART_DECREASE_ITEM,
+  CART_CHANGE_QUANTITY_ITEM,
 } from "../types/cartTypes";
-import { MESSAGE_TYPE_ERROR } from "../types/messageTypes";
+import { MESSAGE_TYPE_ERROR,MESSAGE_TYPE_SUCCESS } from "../types/messageTypes";
 import axios from "axios";
 
 export const getCartItems = () => async (dispatch) => { 
@@ -49,25 +48,44 @@ export const addToCart = (id) => async (dispatch,getState) => {
   }
 };
 
-export const increaseItem = (id) => async (dispatch) => {
+export const changeQuantity = (id,qty) => async (dispatch) => {
   try {
-
     const token = localStorage.getItem('token');
-    const response = await axios.patch(`http://localhost:5000/api/cart?product=${id}`,{quantity: 1},{
+
+    const response = await axios.patch(`http://localhost:5000/api/cart?product=${id}&qty=${qty}`,{qty},{
       headers: {
         Authorization : 'Bearer ' + token
       }
-    })
-    // dispatch({ type: CART_INCREASE_ITEM, payload: id });
+    });
+    console.log(response);
+    dispatch({ type: CART_CHANGE_QUANTITY_ITEM, payload: {id,qty}});
+
   }catch(error) {
     console.log(error);
   }
  
 };
-export const decreaseItem = (id) => async (dispatch) => {
-  dispatch({ type: CART_DECREASE_ITEM, payload: id });
-};
+
 
 export const removeItem = (id) => async (dispatch) => {
-  dispatch({ type: CART_REMOVE_ITEM, payload: id });
+
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.patch(`http://localhost:5000/api/cart/${id}`,{}, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+   
+  
+    dispatch({ type: CART_REMOVE_ITEM, payload: id});
+    dispatch({ type: MESSAGE_TYPE_SUCCESS, payload: response.data.message });
+
+  }catch(error) {
+        dispatch({
+      type: MESSAGE_TYPE_ERROR,
+      payload: "Ürün sepetten silinirken hata oluştu",
+    });
+  }
+ 
 };

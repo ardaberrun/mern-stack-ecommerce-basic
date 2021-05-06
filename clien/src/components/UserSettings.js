@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Collapse, Button } from "antd";
 import UserForm from "./UserForm";
+import RePassword from './RePassword';
 import { logout } from "../redux/actions/userAction";
 
 export default function UserSettings() {
@@ -15,7 +16,10 @@ export default function UserSettings() {
         <Collapse.Panel header="Hesabım" key="1">
           <UserForm />
         </Collapse.Panel>
-        <Collapse.Panel header="Siparişlerim" key="2">
+        <Collapse.Panel header="Şifreni Değiştir" key="2">
+         <RePassword/>
+        </Collapse.Panel>
+        <Collapse.Panel header="Siparişlerim" key="3">
           <p>Siparişlerim</p>
         </Collapse.Panel>
       </Collapse>

@@ -20,7 +20,7 @@ export const getCategories = () => async (dispatch) => {
   dispatch({ type: CATEGORY_ALL_REQUEST });
   try {
     const response = await axios.get("http://localhost:5000/api/category");
-    console.log("hello")
+
     dispatch({ type: CATEGORY_ALL_SUCCESS, payload: response.data.categories });
   } catch (e) {
     dispatch({ type: CATEGORY_ALL_FAIL });
