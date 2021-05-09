@@ -16,7 +16,7 @@ import {
   PRODUCT_REMOVE_FAIL,
   PRODUCT_ADD_COMMENT_REQUEST,
   PRODUCT_ADD_COMMENT_SUCCESS,
-  PRODUCT_ADD_COMMENT_FAIL,
+  PRODUCT_ADD_COMMENT_FAIL
 } from "../types/productTypes";
 import {
   MESSAGE_TYPE_SUCCESS,
@@ -25,13 +25,20 @@ import {
 
 import axios from "axios";
 
-export const getProducts = (slug) => async (dispatch) => {
+export const getProducts = (slug, option) => async (dispatch) => {
   dispatch({ type: PRODUCT_ALL_REQUEST });
+
   try {
     let url = "http://localhost:5000/api/product";
     if (slug) {
       url += `?slug=${slug}`;
+      if (option) {
+        url += `&option=${option}`;
+      }
+    } else if (option) {
+      url += `?option=${option}`;
     }
+
     const response = await axios.get(url);
 
     dispatch({ type: PRODUCT_ALL_SUCCESS, payload: response.data.products });
@@ -40,6 +47,8 @@ export const getProducts = (slug) => async (dispatch) => {
     dispatch({ type: MESSAGE_TYPE_ERROR, payload: e.response.data.error });
   }
 };
+
+
 export const getProductDetail = (id) => async (dispatch) => {
   dispatch({ type: PRODUCT_DETAIL_REQUEST });
   try {
@@ -84,7 +93,7 @@ export const createProduct = ({
       );
       dispatch({
         type: PRODUCT_CREATE_SUCCESS,
-        payload: response.data.product
+        payload: response.data.product,
       });
       dispatch({ type: MESSAGE_TYPE_SUCCESS, payload: response.data.message });
     }

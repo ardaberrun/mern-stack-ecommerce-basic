@@ -5,12 +5,11 @@ import { useParams, useHistory } from "react-router-dom";
 import { Row, Col, Select, Typography, Card,Spin } from "antd";
 
 export default function Cards() {
-  const [, setSelectedOption] = useState(null);
   const state = useSelector((state) => state.product);
   const dispatch = useDispatch();
   const { slug } = useParams();
   const history = useHistory();
-   
+  
   useEffect(() => {
     if (slug) {
       dispatch(getProducts(slug));
@@ -20,10 +19,11 @@ export default function Cards() {
   }, [slug, dispatch]);
 
   const options = [
-    { value: "dec_by_price", label: "En yüksek fiyat" },
-    { value: "inc_by_price", label: "En düşük fiyat" },
-    { value: "desc_by_date", label: "En yeniler" },
+    { value: "price_desc", label: "En yüksek fiyat" },
+    { value: "price_asc", label: "En düşük fiyat" },
+    { value: "createdAt_desc", label: "En yeniler" },
   ];
+
 
   return state.loading ? <Spin /> : (
     <>
@@ -41,7 +41,7 @@ export default function Cards() {
           <Select
             labelInValue
             defaultValue={{ label: "Önerilen sıralama", value: 0 }}
-            onChange={(e) => setSelectedOption(e)}
+            onChange={(e) => dispatch(getProducts(slug,e.value))}
             style={{ width: 200 }}
           >
             {options.map((option, i) => (

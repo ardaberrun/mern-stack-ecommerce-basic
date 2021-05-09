@@ -1,16 +1,36 @@
 const Product = require("../models/Product");
-const Review = require('../models/Review');
+const Review = require("../models/Review");
 
 exports.getProducts = async (req, res) => {
   try {
     if (req.query.slug) {
-      await Product.find()
-        .populate("category", "category.slug", req.query)
-        .exec(function (err, products) {
-          products = products.filter((prod) => prod.category);
+      if (req.query.option) {
+        const [field, value] = req.query.option.split("_");
 
-          res.status(200).json({ products });
-        });
+        await Product.find({})
+          .sort([[field, value]])
+          .populate({
+            path: "category",
+            select: "category.slug",
+            match: { slug: req.query.slug },
+          })
+          .exec(function (err, products) {
+            products = products.filter((prod) => prod.category);
+            console.log(products);
+
+            res.status(200).json({ products });
+          });
+
+      } else {
+        await Product.find()
+          .populate("category", "category.slug", req.query)
+          .exec(function (err, products) {
+            products = products.filter((prod) => prod.category);
+
+            res.status(200).json({ products });
+          });
+
+      }
     } else {
       // search için buraya da populate eklemen gerekebilir burda dursun.
 
@@ -23,7 +43,10 @@ exports.getProducts = async (req, res) => {
 };
 exports.getProductById = async (req, res) => {
   try {
-    const product = await Product.findOne({_id: req.params.id}).populate({path: 'reviews', populate: {path: 'user',select: 'name surname -_id'}})
+    const product = await Product.findOne({ _id: req.params.id }).populate({
+      path: "reviews",
+      populate: { path: "user", select: "name surname -_id" },
+    });
 
     res.status(200).json({ product });
   } catch (error) {
@@ -46,7 +69,9 @@ exports.createProduct = async (req, res) => {
 };
 exports.updateProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body,{new:true});
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
 
     res.status(200).json({ message: "Ürünü başarıyla güncellediniz", product });
   } catch (error) {
@@ -69,20 +94,23 @@ exports.removeProduct = async (req, res) => {
 
 exports.addComment = async (req, res) => {
   try {
-
     const review = new Review(req.body);
 
     await review.save();
 
-    const product = await Product.findByIdAndUpdate(req.params.id, {
-      $push: {
-        reviews: review,
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: {
+          reviews: review,
+        },
       },
-    },{ new: true });
+      { new: true }
+    );
 
-    res.status(200).json({message: 'Başarıyla yorum eklendi', product });
+    res.status(200).json({ message: "Başarıyla yorum eklendi", product });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(400).json({ error: "Yorum Eklerken hata oluştu..." });
   }
 };
