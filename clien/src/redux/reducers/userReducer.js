@@ -16,7 +16,7 @@ import {
 const INITIAL_STATE = {
   user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
-  orders: []
+  orders: null
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {

@@ -15,7 +15,7 @@ export default function Orders() {
     dispatch(getOrders());
   }, []);
 
-  return state.orders.map((order) => (
+  return state.orders && state.orders.map((order) => (
     <>
       <Descriptions title="Sipariş Detayı" layout="vertical" bordered>
         <Descriptions.Item label="Sipariş Tarihi">
