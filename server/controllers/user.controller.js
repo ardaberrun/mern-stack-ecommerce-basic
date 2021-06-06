@@ -1,6 +1,7 @@
 const bcyrpt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Order = require("../models/Order");
 const Cart = require('../models/Cart');
 const { registerValidation, loginValidation } = require("../helper/validation");
 
@@ -30,6 +31,9 @@ exports.registerController = async (req, res) => {
     
     const newCart = new Cart({user: savedUser._id});
     await newCart.save();
+
+    const newOrder = new Order({user: savedUser._id});
+    await newOrder.save();
 
     res.status(201).json({ message: "Kullanıcı başarıyla oluşturuldu." });
   } catch (e) {

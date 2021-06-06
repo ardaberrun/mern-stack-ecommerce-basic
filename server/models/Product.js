@@ -25,6 +25,7 @@ const productSchema = new mongoose.Schema(
     stock: {
       type: Number,
       default: 15,
+      min: 0
     },
     reviews: [
       {

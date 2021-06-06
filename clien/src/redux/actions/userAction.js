@@ -9,6 +9,9 @@ import {
   USER_LOGOUT_REQUEST,
   USER_LOGOUT_SUCCESS,
   USER_LOGOUT_FAIL,
+  USER_GET_ORDERS_REQUEST,
+  USER_GET_ORDERS_SUCCESS,
+  USER_GET_ORDERS_FAIL
 } from "../types/userTypes";
 import {CART_DELETE} from '../types/cartTypes';
 import {MESSAGE_TYPE_SUCCESS,MESSAGE_TYPE_ERROR} from '../types/messageTypes';
@@ -55,7 +58,7 @@ export const login = ({ email, password }, history) => async (dispatch) => {
 
 };
 
-export const logout = (history) => async (dispatch,getState) => {
+export const logout = (history) => async (dispatch) => {
   dispatch({ type: USER_LOGOUT_REQUEST });
   try {
     localStorage.removeItem("token");
@@ -71,5 +74,23 @@ export const logout = (history) => async (dispatch,getState) => {
     dispatch({type: USER_LOGOUT_FAIL});
     dispatch({ type: MESSAGE_TYPE_ERROR, payload: 'Çıkış yaparken bir hata oluştu.'});   
   }
+};
 
+export const getOrders = () => async (dispatch) => {
+  dispatch({type: USER_GET_ORDERS_REQUEST});
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await axios.get(`http://localhost:5000/api/order`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });  
+    dispatch({type: USER_GET_ORDERS_SUCCESS,payload: response.data.orders});    
+
+  }catch(e) {
+    dispatch({type: USER_GET_ORDERS_FAIL});
+    dispatch({ type: MESSAGE_TYPE_ERROR, payload: 'Satın alınan ürünler getirilirken bir hata oluştu.'});   
+  
+  }
 };

@@ -45,13 +45,6 @@ export default function UserForm() {
       <Form.Item label="Email" name="email">
         <Input placeholder="Mail adresinizi giriniz." />
       </Form.Item>
-      <Form.Item label="Şifre" name="password">
-        <Input placeholder="Yeni şifrenizi girin" />
-      </Form.Item>
-      <Form.Item label="Şifre Tekrar" name="repassword">
-        <Input placeholder="Yeni şifrenizi tekrar giriniz" />
-      </Form.Item>
-
       <Form.Item>
         <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
           Hesabımı Düzenle

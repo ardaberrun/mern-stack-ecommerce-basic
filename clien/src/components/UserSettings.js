@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Collapse, Button } from "antd";
 import UserForm from "./UserForm";
 import RePassword from './RePassword';
+import Orders from './Orders';
 import { logout } from "../redux/actions/userAction";
 
 export default function UserSettings() {
@@ -12,7 +13,7 @@ export default function UserSettings() {
 
   return (
     <>
-      <Collapse style={{ marginTop: "1rem" }} defaultActiveKey={["1"]}>
+      <Collapse style={{ marginTop: "1rem" }}>
         <Collapse.Panel header="Hesabım" key="1">
           <UserForm />
         </Collapse.Panel>
@@ -20,7 +21,7 @@ export default function UserSettings() {
          <RePassword/>
         </Collapse.Panel>
         <Collapse.Panel header="Siparişlerim" key="3">
-          <p>Siparişlerim</p>
+          <Orders/>
         </Collapse.Panel>
       </Collapse>
       <Button

@@ -4,6 +4,7 @@ import {
   CART_ADD_ITEM,
   CART_REMOVE_ITEM,
   CART_CHANGE_QUANTITY_ITEM,
+  CART_BUY
 } from "../types/cartTypes";
 import { MESSAGE_TYPE_ERROR,MESSAGE_TYPE_SUCCESS } from "../types/messageTypes";
 import axios from "axios";
@@ -89,3 +90,31 @@ export const removeItem = (id) => async (dispatch) => {
   }
  
 };
+
+
+export const buyProducts = (productsToBuy,totalPriceOfProductsToBuy) => async (dispatch) => {
+
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await axios.post(`http://localhost:5000/api/order`, {productsToBuy,totalPriceOfProductsToBuy}, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+   
+    console.log(response.data);
+  
+    dispatch({ type: CART_BUY });
+    dispatch({ type: MESSAGE_TYPE_SUCCESS, payload: response.data.message });
+
+  }catch(error) {
+        dispatch({
+      type: MESSAGE_TYPE_ERROR,
+      payload: "Ürün satın alınırken bir hata oluştu",
+    });
+  }
+
+
+
+}

@@ -2,9 +2,9 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Result, Button } from "antd";
 import { useHistory } from "react-router-dom";
-import { Row, Col, Typography, InputNumber, Card } from "antd";
+import { Row, Col, Typography, InputNumber, Card,Divider } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { changeQuantity, removeItem } from "../redux/actions/cartAction";
+import { changeQuantity, removeItem,buyProducts } from "../redux/actions/cartAction";
 
 function Basket() {
   const { user, cart } = useSelector((state) => state);
@@ -130,8 +130,19 @@ function Basket() {
               <Typography.Text strong>Kargo Toplamı</Typography.Text>
               <Typography.Text strong>0TL</Typography.Text>
             </div>
+            <Divider/>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography.Text strong>Toplam</Typography.Text>
+              <Typography.Text strong>{totalPrice(cart.cartItems)}TL</Typography.Text>
+            </div>
           </Card>
-          <Button type="primary" style={{ width: "100%", marginTop: "0.5rem" }}>
+          <Button onClick={()=> dispatch(buyProducts(cart.cartItems,totalPrice(cart.cartItems)))} type="primary" style={{ width: "100%", marginTop: "0.5rem" }}>
             Siparişi Tamamla
           </Button>
         </Col>

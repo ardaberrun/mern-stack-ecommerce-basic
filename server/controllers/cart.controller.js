@@ -1,5 +1,6 @@
 const Cart = require("../models/Cart");
 
+
 exports.getCart = async (req, res) => {
   try {
     const user = await Cart.findOne({ user: req.user._id }).populate({
@@ -69,3 +70,4 @@ exports.removeCartItem = async (req, res) => {
     console.log(e);
   }
 };
+

@@ -18,15 +18,17 @@ app.use(cors());
 app.use(express.json());
 
 
-const userRoute = require('./routes/user') 
-const productRoute = require('./routes/product') 
-const categoryRoute = require('./routes/category') 
+const userRoute = require('./routes/user');
+const productRoute = require('./routes/product');
+const categoryRoute = require('./routes/category');
 const cartRoute = require('./routes/cart');
+const orderRoute = require('./routes/order');
 // Routes
 app.use('/api',userRoute);
 app.use('/api/cart',cartRoute);
 app.use('/api/product',productRoute);
 app.use('/api/category',categoryRoute);
+app.use('/api/order',orderRoute);
 
 
 

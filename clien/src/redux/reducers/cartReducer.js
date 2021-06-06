@@ -3,7 +3,8 @@ import {
   CART_ADD_ITEM,
   CART_REMOVE_ITEM,
   CART_CHANGE_QUANTITY_ITEM,
-  CART_DELETE
+  CART_DELETE,
+  CART_BUY
 } from "../types/cartTypes";
 
 const INITIAL_STATE = {
@@ -33,6 +34,7 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         ...state,
         cartItems: state.cartItems.filter(cartItem => cartItem.product._id !== action.payload)
       };
+    case CART_BUY:
     case CART_DELETE:
       return {
         ...state,

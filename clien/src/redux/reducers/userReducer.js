@@ -8,11 +8,15 @@ import {
   USER_LOGOUT_REQUEST,
   USER_LOGOUT_SUCCESS,
   USER_LOGOUT_FAIL,
+  USER_GET_ORDERS_REQUEST,
+  USER_GET_ORDERS_SUCCESS,
+  USER_GET_ORDERS_FAIL
 } from "../types/userTypes";
 
 const INITIAL_STATE = {
   user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
+  orders: []
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -20,6 +24,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case USER_LOGIN_REQUEST:
     case USER_REGISTER_REQUEST:
     case USER_LOGOUT_REQUEST:
+    case USER_GET_ORDERS_REQUEST:
       return {
         ...state,
         loading: true,
@@ -30,9 +35,15 @@ const userReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         user: action.payload,
       };
+    case USER_GET_ORDERS_SUCCESS:
+      return {
+        ...state,
+        orders: action.payload
+      };
     case USER_REGISTER_SUCCESS:
     case USER_REGISTER_FAIL:
     case USER_LOGIN_FAIL:
+    case USER_GET_ORDERS_FAIL:
       return {
         ...state,
         loading: false,

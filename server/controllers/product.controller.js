@@ -16,7 +16,7 @@ exports.getProducts = async (req, res) => {
           })
           .exec(function (err, products) {
             products = products.filter((prod) => prod.category);
-            console.log(products);
+     
 
             res.status(200).json({ products });
           });
@@ -33,8 +33,15 @@ exports.getProducts = async (req, res) => {
       }
     } else {
       // search için buraya da populate eklemen gerekebilir burda dursun.
+      let products;
 
-      const products = await Product.find({});
+      if(req.query.option)  {
+        const [field, value] = req.query.option.split("_");
+        products = await Product.find({}).sort([[field, value]]);
+      }else {
+        products = await Product.find({});
+      }
+      
       res.status(200).json({ products });
     }
   } catch (error) {
