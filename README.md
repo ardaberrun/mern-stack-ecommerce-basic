@@ -1,6 +1,9 @@
 ## mern-stack-ecommerce-basic
 
+
 ### LOGIN-REGISTER PAGE
+
+-- Note: If you want to create an admin, use Postman or etc. 
 
 ![giris](https://user-images.githubusercontent.com/48234601/121542019-6f44cf00-ca10-11eb-9be0-9013f080bef6.png)
 
