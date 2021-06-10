@@ -1,5 +1,7 @@
 const Product = require("../models/Product");
+const Order = require("../models/Order");
 const Review = require("../models/Review");
+
 
 exports.getProducts = async (req, res) => {
   try {
@@ -101,8 +103,7 @@ exports.removeProduct = async (req, res) => {
 
 exports.addComment = async (req, res) => {
   try {
-    const review = new Review(req.body);
-
+    const review = new Review({...req.body.commentData,user:req.user._id});
     await review.save();
 
     const product = await Product.findByIdAndUpdate(

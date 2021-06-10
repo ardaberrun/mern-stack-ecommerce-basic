@@ -172,14 +172,14 @@ export const removeProduct = (id) => async (dispatch) => {
   }
 };
 
-export const addComment = (productId, commentData) => async (dispatch) => {
+export const addComment = (productId, commentData,orderProductId,orderId) => async (dispatch) => {
   dispatch({ type: PRODUCT_ADD_COMMENT_REQUEST });
   try {
     const token = localStorage.getItem("token");
 
     const response = await axios.post(
       `http://localhost:5000/api/product/${productId}/comment`,
-      commentData,
+      {commentData,orderProductId,orderId},
       {
         headers: {
           Authorization: "Bearer " + token,

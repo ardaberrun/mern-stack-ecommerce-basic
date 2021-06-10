@@ -1,26 +1,24 @@
 import React from "react";
-import { Form, Modal, Input } from "antd";
+import { Form, Modal,Image, Input,Rate } from "antd";
 import { useDispatch } from "react-redux";
-import { createCategory, getCategories } from "../redux/actions/categoryAction";
+import {addComment} from '../redux/actions/productAction';
 
-export default function CategoryModalForm({ isOpen, closeModal }) {
+
+export default function CreateComment({ isOpen, closeModal,commentProduct,orderId }) {
     const dispatch = useDispatch();
   
     const handleSubmit = (e) => {
-      dispatch(createCategory(e.name));
-
-      dispatch(getCategories());
-      
-
+      dispatch(addComment(commentProduct.product._id,e,commentProduct._id,orderId))
       closeModal();
     };
+
     const [form] = Form.useForm();
   
     return (<>
      <Modal
         visible={isOpen}
-        title="Kategori Oluştur"
-        okText="Oluştur"
+        title="Bu Ürünü Değerlendir!"
+        okText="Değerlendir"
         cancelText="İptal"
         onCancel={closeModal}
         onOk={() => {
@@ -35,17 +33,21 @@ export default function CategoryModalForm({ isOpen, closeModal }) {
             });
         }}
       >
+          <Image src={commentProduct.product.image}/>
         <Form
           form={form}
           initialValues={{
             modifier: 'public',
           }}
         >
+    <Form.Item name="rating" label="Puan Ver">
+        <Rate allowHalf/>
+      </Form.Item>
           <Form.Item
-            name="name"
+            name="comment"
             rules={[{ required: true, message: "Bu alan boş bırakılamaz!" }]}
           >
-            <Input placeholder="Kategori ekle" />
+            <Input.TextArea placeholder="Yorum Yap!" rows={4}/>
           </Form.Item>
         </Form>
       </Modal>

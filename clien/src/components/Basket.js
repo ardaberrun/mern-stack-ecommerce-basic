@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Result, Button } from "antd";
 import { useHistory } from "react-router-dom";
@@ -10,6 +10,7 @@ function Basket() {
   const { user, cart } = useSelector((state) => state);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [isProcessCompleted,setIsProcessCompleted] = useState(false);
 
   const totalPrice = (cartItems) => cartItems.reduce((acc,curr) => acc+(curr.product.price * curr.quantity),0)
 
@@ -24,6 +25,17 @@ function Basket() {
         </Button>
       }
     />
+  ) : isProcessCompleted ? (
+    <Result
+    status="success"
+    title="Satın Alma İşlemi Başarılı"
+    subTitle="Alışverişe devam et sepetini doldur, indirimleri kaçırma! ."
+    extra={
+      <Button type="primary" onClick={() => history.push("/membership")}>
+        Siparişimi Gör
+      </Button>
+    }
+  />
   ) : cart.cartItems.length === 0 ? (
     <Result
       status="404"
@@ -142,7 +154,10 @@ function Basket() {
               <Typography.Text strong>{totalPrice(cart.cartItems)}TL</Typography.Text>
             </div>
           </Card>
-          <Button onClick={()=> dispatch(buyProducts(cart.cartItems,totalPrice(cart.cartItems)))} type="primary" style={{ width: "100%", marginTop: "0.5rem" }}>
+          <Button onClick={()=>{
+            setIsProcessCompleted(true);
+            dispatch(buyProducts(cart.cartItems,totalPrice(cart.cartItems)));
+            }} type="primary" style={{ width: "100%", marginTop: "0.5rem" }}>
             Siparişi Tamamla
           </Button>
         </Col>

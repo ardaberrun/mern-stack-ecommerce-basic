@@ -3,7 +3,7 @@ const Cart = require("../models/Cart");
 
 exports.getOrders = async (req, res) => {
   try {
-    const orders = await Order.findOne({ user: req.user._id }).populate({
+    const orders = await Order.findOne({ user: req.user._id }).sort([['createdAt', '-1']]).populate({
       path: "orders.products.product",
       select: "_id image",
     });
